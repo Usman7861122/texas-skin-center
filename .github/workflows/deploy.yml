@@ -1,0 +1,68 @@
+name: Deploy to S3
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-s3
+  cancel-in-progress: true
+
+env:
+  S3_BUCKET: texas-skin-center-website
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build site
+        run: npm run build
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
+
+      # Hashed files in /_astro never change, so browsers can keep them for a year.
+      - name: Upload hashed assets
+        run: |
+          aws s3 sync dist/_astro "s3://${S3_BUCKET}/_astro" \
+            --cache-control "public,max-age=31536000,immutable" --delete
+
+      # Images and videos: cache for a week.
+      - name: Upload images and videos
+        run: |
+          aws s3 sync dist "s3://${S3_BUCKET}" \
+            --exclude "*" --include "images/*" --include "videos/*" --include "fonts/*" \
+            --cache-control "public,max-age=604800"
+
+      # Pages and everything else: always check for a fresh copy.
+      - name: Upload pages
+        run: |
+          aws s3 sync dist "s3://${S3_BUCKET}" \
+            --exclude "_astro/*" --exclude "images/*" --exclude "videos/*" --exclude "fonts/*" \
+            --cache-control "public,max-age=0,must-revalidate" --delete
+
+      # Optional: set the secret CLOUDFRONT_DISTRIBUTION_ID to clear the CDN cache after each deploy.
+      - name: Clear CloudFront cache
+        if: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID != '' }}
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}" --paths "/*"
