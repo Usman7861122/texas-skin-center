@@ -18,7 +18,7 @@ const medical = new Set(['acne', 'actinic-keratosis', 'eczema', 'hair-loss-prp',
 const items = svcNav.map((c) => {
   const slug = c.href.split('/').pop()!;
   const dir = slug === 'acne' ? null : services.find((s) => s.slug === slug)!.dir;
-  return { t: c.label, d: c.desc ?? '', href: `/services/${slug}-${id}`, img: dir ? `/images/${dir}/a.jpg` : '/images/acne/exam.jpg', cat: medical.has(slug) ? 'medical' : 'cosmetic' };
+  return { t: c.label, d: (c as { desc?: string }).desc ?? '', href: `/services/${slug}-${id}`, img: dir ? `/images/${dir}/a.jpg` : '/images/acne/exam.jpg', cat: medical.has(slug) ? 'medical' : 'cosmetic' };
 });
 const tabs = [
   { id: 'all', label: 'All services', blurb: `Everything below is offered at our ${loc.city} clinic.` },
