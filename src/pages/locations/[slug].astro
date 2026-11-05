@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LocationPage from '../../components/sections/LocationPage.astro';
+import { locations } from '../../data/site';
+export function getStaticPaths() {
+  return locations.map((l) => ({ params: { slug: l.id }, props: { id: l.id, city: l.city, line1: l.line1 } }));
+}
+const { id, city, line1 } = Astro.props;
+---
+<BaseLayout title={`Dermatologist in ${city}, TX | Texas Skin Center`} description={`Texas Skin Center in ${city}, TX at ${line1}. Board-certified dermatology providers, same-day appointments, hours, map and directions.`}>
+  <LocationPage id={id} />
+</BaseLayout>

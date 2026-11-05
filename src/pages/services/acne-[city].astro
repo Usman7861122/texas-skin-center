@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AcnePage from '../../components/sections/AcnePage.astro';
+import { locations, acneNearby } from '../../data/site';
+export function getStaticPaths() {
+  return locations.map((l) => ({ params: { city: l.id }, props: { city: l.city, nearby: acneNearby[l.id] } }));
+}
+const { city, nearby } = Astro.props;
+---
+<BaseLayout title={`Acne Treatment in ${city}, TX | Texas Skin Center`} description={`Expert acne treatment in ${city}, TX for teens and adults. Board-certified dermatologists, clear plans and same-day appointments at Texas Skin Center.`}>
+  <AcnePage city={city} nearby={nearby} />
+</BaseLayout>

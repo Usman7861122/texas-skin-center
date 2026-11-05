@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+import AboutStory from '../components/sections/AboutStory.astro';
+import Providers from '../components/sections/Providers.astro';
+import ParallaxBand from '../components/sections/ParallaxBand.astro';
+import Insurance from '../components/sections/Insurance.astro';
+import Gallery from '../components/sections/Gallery.astro';
+import Locations from '../components/sections/Locations.astro';
+import Contact from '../components/sections/Contact.astro';
+import { media } from '../data/site';
+---
+<BaseLayout title="About Us | Texas Skin Center" description="Meet Texas Skin Center: board-certified dermatologists and a caring team serving Pearland, Houston and Kingwood, TX with same-day appointments.">
+  <PageHero
+    eyebrow="About us"
+    title="Dermatology that feels"
+    accent="personal."
+    lead="Board-certified dermatologists and a caring team, close to home in Pearland, Houston and Kingwood."
+    image={media.group}
+    alt="The Texas Skin Center team gathered together in the clinic"
+    pos="50% 22%"
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'About us' }]}
+  />
+  <AboutStory />
+  <Providers />
+  <ParallaxBand />
+  <Insurance />
+  <Gallery />
+  <Locations />
+  <Contact />
+</BaseLayout>

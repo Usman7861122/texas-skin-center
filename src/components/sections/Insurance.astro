@@ -1,0 +1,36 @@
+---
+import Reveal from '../islands/Reveal';
+import { insuranceLogos, PHONE, PHONE_HREF } from '../../data/site';
+const rowA = insuranceLogos.slice(0, 8);
+const rowB = insuranceLogos.slice(8);
+---
+<section id="insurance" class="section bg-aurora grain">
+  <div class="orb blue" style="width:24rem;height:24rem;right:-6rem;top:-4rem"></div>
+  <div class="wrap text-center">
+    <Reveal client:visible><p class="eyebrow justify-center">Insurance</p></Reveal>
+    <Reveal client:visible delay={0.08}><h2 class="h2 mt-5">Accepted <b>insurance plans</b></h2></Reveal>
+    <Reveal client:visible delay={0.16}>
+      <p class="mx-auto mt-5 max-w-xl text-ink/70">We accept a wide range of insurance plans. Please call the office for additional information.</p>
+    </Reveal>
+  </div>
+
+  <div class="relative z-[2] mt-14 space-y-5 [mask-image:linear-gradient(90deg,transparent,#000_10%,#000_90%,transparent)]">
+    {[{ row: rowA, cls: '' }, { row: rowB, cls: 'rev' }].map(({ row, cls }) => (
+      <div class="marquee-wrap overflow-hidden py-3">
+        <div class={`marquee ${cls}`}>
+          {[...row, ...row].map((src, i) => (
+            <div class="logo-tile" aria-hidden={i >= row.length ? 'true' : undefined}>
+              <img src={src} alt={i < row.length ? 'Accepted insurance logo' : ''} loading="lazy" referrerpolicy="no-referrer" />
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <div class="wrap mt-12 text-center">
+    <Reveal client:visible>
+      <a href={PHONE_HREF} class="btn btn-line">Call {PHONE} to confirm your plan</a>
+    </Reveal>
+  </div>
+</section>

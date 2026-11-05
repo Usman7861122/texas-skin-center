@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { legal, LEGAL_UPDATED, type LegalDoc } from '../../data/legal';
+interface Props { doc: LegalDoc }
+const { doc } = Astro.props;
+const id = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+---
+<BaseLayout title={`${doc.title} | Texas Skin Center`} description={doc.desc}>
+  <section class="relative overflow-hidden bg-gradient-to-br from-ink via-navy to-sapphire-deep pb-16 pt-36 text-white md:pb-20 md:pt-44">
+    <div class="orb deep" style="width:30rem;height:30rem;right:-8rem;top:-10rem;opacity:.5"></div>
+    <div class="wrap relative">
+      <nav aria-label="Breadcrumb" class="text-sm text-white/60"><a href="/" class="hover:text-white">Home</a> <span class="mx-1.5">/</span> {doc.title}</nav>
+      <h1 class="mt-5 font-display text-[clamp(2rem,5vw,3.6rem)] font-light leading-tight">{doc.title}</h1>
+      <p class="mt-5 max-w-2xl text-lg leading-relaxed text-white/80">{doc.intro}</p>
+      <p class="mt-5 font-display text-[0.75rem] uppercase tracking-[0.18em] text-sand">Last updated {LEGAL_UPDATED}</p>
+    </div>
+  </section>
+
+  <section class="section bg-aurora grain">
+    <div class="wrap grid items-start gap-10 lg:grid-cols-[17rem_1fr] lg:gap-16">
+      <aside class="lg:sticky lg:top-28">
+        <div class="rounded-[8px] bg-white p-6 shadow-[0_24px_48px_-28px_rgba(10,34,57,.5)]">
+          <p class="eyebrow">On this page</p>
+          <ol class="mt-4 space-y-2 text-sm">
+            {doc.sections.map((s) => <li><a href={`#${id(s.h)}`} class="text-ink/70 transition hover:text-sapphire">{s.h}</a></li>)}
+          </ol>
+        </div>
+        <div class="mt-5 rounded-[8px] bg-white p-6 shadow-[0_24px_48px_-28px_rgba(10,34,57,.5)]">
+          <p class="eyebrow">Other policies</p>
+          <ul class="mt-4 space-y-2 text-sm">
+            {legal.filter((l) => l.slug !== doc.slug).map((l) => <li><a href={`/${l.slug}`} class="text-ink/70 transition hover:text-sapphire">{l.title}</a></li>)}
+          </ul>
+          <button type="button" id="open-cookies-side" class="btn btn-dark-ghost btn-sm mt-5">Cookie settings</button>
+        </div>
+      </aside>
+
+      <article class="rounded-[10px] bg-white p-7 shadow-[0_40px_80px_-40px_rgba(10,34,57,.5)] md:p-12">
+        {doc.sections.map((s) => (
+          <section id={id(s.h)} class="scroll-mt-28 border-b border-ink/10 pb-8 pt-8 first:pt-0 last:border-0 last:pb-0">
+            <h2 class="font-display text-xl font-medium md:text-2xl">{s.h}</h2>
+            {s.p?.map((t) => <p class="mt-3 leading-relaxed text-ink/75">{t}</p>)}
+            {s.ul && <ul class="mt-3 space-y-2 text-ink/75">{s.ul.map((t) => <li class="flex gap-3 leading-relaxed"><span class="mt-[0.6rem] h-1.5 w-1.5 shrink-0 rounded-full bg-sapphire"></span><span>{t}</span></li>)}</ul>}
+          </section>
+        ))}
+      </article>
+    </div>
+  </section>
+  <script>
+    document.getElementById('open-cookies-side')?.addEventListener('click', () => window.dispatchEvent(new Event('tsc:open-cookies')));
+  </script>
+</BaseLayout>

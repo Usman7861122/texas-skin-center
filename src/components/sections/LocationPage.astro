@@ -1,0 +1,163 @@
+---
+import PageHero from './PageHero.astro';
+import Reveal from '../islands/Reveal';
+import HoursCard from '../islands/HoursCard';
+import ServiceTabs from '../islands/ServiceTabs';
+import { BOOK_URL, PHONE, PHONE_HREF, locations, providers, nav, clinicHours, CLINIC_TZ, acneNearby } from '../../data/site';
+import { services } from '../../data/services';
+interface Props { id: string; }
+const { id } = Astro.props;
+const loc = locations.find((l) => l.id === id)!;
+const others = locations.filter((l) => l.id !== id);
+const q = encodeURIComponent(`Texas Skin Center, ${loc.line1}, ${loc.line2}`);
+const mapSrc = `https://www.google.com/maps?q=${q}&output=embed`;
+const dirHref = `https://www.google.com/maps/dir/?api=1&destination=${q}`;
+
+const svcNav = nav.find((n) => n.label === 'Services')!.children!.filter((c) => c.label !== 'View More Services');
+const medical = new Set(['acne', 'actinic-keratosis', 'eczema', 'hair-loss-prp', 'rosacea']);
+const items = svcNav.map((c) => {
+  const slug = c.href.split('/').pop()!;
+  const dir = slug === 'acne' ? null : services.find((s) => s.slug === slug)!.dir;
+  return { t: c.label, d: c.desc ?? '', href: `/services/${slug}-${id}`, img: dir ? `/images/${dir}/a.jpg` : '/images/acne/exam.jpg', cat: medical.has(slug) ? 'medical' : 'cosmetic' };
+});
+const tabs = [
+  { id: 'all', label: 'All services', blurb: `Everything below is offered at our ${loc.city} clinic.` },
+  { id: 'medical', label: 'Medical', blurb: 'Treatment for common and long-lasting skin conditions, for children and adults.' },
+  { id: 'cosmetic', label: 'Cosmetic', blurb: 'Natural-looking treatments that refresh your skin and soften signs of aging.' },
+];
+---
+<PageHero
+  eyebrow={`${loc.city} clinic`}
+  title="Dermatology care in"
+  accent={`${loc.city}, TX.`}
+  lead={`Board-certified providers, same-day appointments and a caring team, at ${loc.line1}.`}
+  image={loc.img}
+  alt={`The reception area at our ${loc.city} clinic`}
+  pos="50% 50%"
+  nearby={acneNearby[id]}
+  ctaLabel="Get directions"
+  ctaHref="#visit"
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Locations', href: '/locations' }, { label: loc.city }]}
+/>
+
+<section id="visit" class="section bg-aurora grain">
+  <div class="orb blue" style="width:26rem;height:26rem;left:-8rem;top:2rem"></div>
+  <div class="wrap">
+    <div class="mx-auto mb-12 max-w-2xl text-center">
+      <Reveal client:visible><p class="eyebrow justify-center">Visit us</p></Reveal>
+      <Reveal client:visible delay={0.08}><h2 class="h2 mt-5">Find us in <b>{loc.city}</b></h2></Reveal>
+    </div>
+    <div class="grid gap-8 lg:grid-cols-[minmax(0,26rem)_1fr]">
+      <div class="flex flex-col gap-6">
+        <Reveal client:visible>
+          <div class="rounded-[8px] bg-white p-7 shadow-[0_30px_60px_-34px_rgba(10,34,57,.55)]">
+            <p class="eyebrow">Address</p>
+            <address class="mt-4 font-display text-xl font-light not-italic leading-snug">{loc.line1}<br />{loc.line2}</address>
+            <p class="mt-5 font-display text-[0.72rem] uppercase tracking-[0.18em] text-ink/50">Phone</p>
+            <a href={PHONE_HREF} class="mt-1 inline-block font-display text-lg text-sapphire underline-offset-4 hover:underline">{PHONE}</a>
+            <div class="mt-6 flex flex-wrap gap-3">
+              <a href={BOOK_URL} class="btn btn-primary btn-sm">Book Appointment</a>
+              <a href={dirHref} target="_blank" rel="noopener" class="btn btn-dark-ghost btn-sm">Get directions</a>
+            </div>
+          </div>
+        </Reveal>
+        <Reveal client:visible delay={0.1}>
+          <div class="rounded-[8px] bg-white p-7 shadow-[0_30px_60px_-34px_rgba(10,34,57,.55)]">
+            <HoursCard client:load hours={clinicHours} tz={CLINIC_TZ} />
+            <p class="mt-4 text-[0.78rem] text-ink/50">Hours may change on holidays. Call us to confirm.</p>
+          </div>
+        </Reveal>
+      </div>
+      <Reveal client:visible delay={0.1} x={40} y={0} className="flex">
+        <div class="relative min-h-[26rem] w-full overflow-hidden rounded-[8px] shadow-[0_40px_70px_-36px_rgba(10,34,57,.7)] lg:min-h-full">
+          <iframe title={`Map of the ${loc.city} clinic`} src={mapSrc} class="absolute inset-0 h-full w-full border-0" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </Reveal>
+    </div>
+  </div>
+</section>
+
+<section class="section bg-ink text-white">
+  <div class="orb deep" style="width:34rem;height:34rem;right:-12rem;top:-10rem"></div>
+  <div class="wrap">
+    <div class="mx-auto mb-14 max-w-2xl text-center">
+      <Reveal client:visible><p class="eyebrow on-dark justify-center">Our providers</p></Reveal>
+      <Reveal client:visible delay={0.08}><h2 class="h2 on-dark mt-5">Meet the <b>care team</b></h2></Reveal>
+      <Reveal client:visible delay={0.16}><p class="mt-5 text-white/70">Our providers care for patients across all three clinics. Call us to ask about availability in {loc.city}.</p></Reveal>
+    </div>
+    <ul class="mx-auto flex max-w-6xl flex-wrap justify-center gap-6">
+      {providers.map((p, i) => (
+        <li class="flex w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(20%-1.2rem)]">
+          <Reveal client:visible delay={(i % 5) * 0.08} className="flex w-full">
+            <article class="pcard group">
+              <a href={p.href} class="block" aria-label={`View profile: ${p.name}`}>
+                <div class="shot"><div class="sq"><img src={p.img} alt={`Portrait of ${p.name}`} loading="lazy" style={`object-position:${p.pos}`} /><span class="sheen"></span></div></div>
+              </a>
+              <div class="flex flex-1 flex-col px-2 pb-2 pt-5">
+                <h3 class="font-display text-[1.02rem] font-medium leading-snug">{p.name}</h3>
+                <p class="mt-1.5 text-[0.8rem] leading-snug text-sand">{p.role}</p>
+                <div class="mt-auto pt-4"><a href={p.href} class="btn btn-primary btn-sm">View profile</a></div>
+              </div>
+            </article>
+          </Reveal>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<section id="services" class="section bg-sand grain">
+  <div class="orb blue" style="width:24rem;height:24rem;right:-8rem;top:-4rem"></div>
+  <div class="wrap">
+    <div class="mx-auto mb-10 max-w-2xl text-center">
+      <Reveal client:visible><p class="eyebrow justify-center">Services in {loc.city}</p></Reveal>
+      <Reveal client:visible delay={0.08}><h2 class="h2 mt-5">Care you can get <b>close to home</b></h2></Reveal>
+    </div>
+    <ServiceTabs client:visible tabs={tabs} items={items} />
+  </div>
+</section>
+
+<section class="section bg-ink text-white">
+  <div class="orb deep" style="width:30rem;height:30rem;left:-10rem;top:-6rem"></div>
+  <div class="wrap">
+    <div class="mx-auto mb-14 max-w-2xl text-center">
+      <Reveal client:visible><p class="eyebrow on-dark justify-center">Our other clinics</p></Reveal>
+      <Reveal client:visible delay={0.08}><h2 class="h2 on-dark mt-5">Closer to <b>another part of town?</b></h2></Reveal>
+    </div>
+    <ul class="mx-auto grid max-w-4xl gap-6 md:grid-cols-2">
+      {others.map((l, i) => (
+        <li>
+          <Reveal client:visible delay={i * 0.1} className="h-full">
+            <article class="pcard group h-full">
+              <a href={`/locations/${l.id}`} class="block" aria-label={`Texas Skin Center ${l.city}`}><div class="shot"><div class="sq"><img src={l.img} alt={`Reception area at our ${l.city} clinic`} loading="lazy" /><span class="sheen"></span></div></div></a>
+              <div class="flex flex-1 flex-col px-3 pb-3 pt-6">
+                <h3 class="font-display text-[1.3rem] font-medium">{l.city}</h3>
+                <p class="mt-2 text-[0.95rem] leading-relaxed text-white/70">{l.line1}<br />{l.line2}</p>
+                <div class="mt-auto flex flex-wrap gap-3 pt-6">
+                  <a href={`/locations/${l.id}`} class="btn btn-primary btn-sm">View {l.city} clinic</a>
+                  <a href={BOOK_URL} class="btn btn-ghost btn-sm">Book visit</a>
+                </div>
+              </div>
+            </article>
+          </Reveal>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<section class="section bg-aurora grain">
+  <div class="orb sand" style="width:24rem;height:24rem;right:-6rem;top:-4rem"></div>
+  <div class="wrap">
+    <div class="rounded-[10px] bg-gradient-to-br from-navy to-sapphire p-10 text-center text-white shadow-[0_50px_90px_-40px_rgba(27,111,184,.8)] md:p-16">
+      <Reveal client:visible><h2 class="font-display text-[clamp(1.9rem,4vw,3rem)] font-light leading-tight">Book your visit in {loc.city}</h2></Reveal>
+      <Reveal client:visible delay={0.1}><p class="mx-auto mt-4 max-w-xl text-white/80">Same-day appointments are available. Call us or book online.</p></Reveal>
+      <Reveal client:visible delay={0.2}>
+        <div class="mt-8 flex flex-wrap justify-center gap-4">
+          <a href={BOOK_URL} class="btn btn-sand">Book Appointment</a>
+          <a href={PHONE_HREF} class="btn btn-ghost">Call {PHONE}</a>
+        </div>
+      </Reveal>
+    </div>
+  </div>
+</section>

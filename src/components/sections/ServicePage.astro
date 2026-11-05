@@ -1,0 +1,224 @@
+---
+import PageHero from './PageHero.astro';
+import Reveal from '../islands/Reveal';
+import { BOOK_URL, PHONE, PHONE_HREF, locations } from '../../data/site';
+import { services } from '../../data/services';
+import type { Service } from '../../data/services';
+interface Props { svc: Service; city?: string; nearby?: string; }
+const { svc, city, nearby } = Astro.props;
+
+const others = city ? locations.filter((l) => l.city !== city) : locations;
+const hero = city ? { title: svc.name, accent: `in ${city}.` } : { title: svc.heroTitle, accent: svc.heroAccent };
+const overviewTitle = city ? `${svc.name} in ${city}, planned around you` : svc.overviewTitle;
+const ctaTitle = city ? `Book your ${svc.eyebrow.toLowerCase().replace(' (prp)', '')} visit in ${city}` : svc.ctaGeneral;
+const href = (id: string) => `/services/${svc.slug}-${id}`;
+const known = new Set([...services.map((s) => s.slug), 'acne']);
+const related = svc.related.filter((r) => known.has(r.slug));
+const glyphs = ['drop', 'ring', 'burst', 'wave'];
+---
+<PageHero
+  eyebrow={svc.eyebrow}
+  title={hero.title}
+  accent={hero.accent}
+  lead={svc.lead}
+  image={`/images/${svc.dir}/a.jpg`}
+  alt={svc.imgA.alt}
+  pos={svc.imgA.pos}
+  nearby={nearby}
+  ctaLabel="Learn more"
+  ctaHref="#types"
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Services', href: '/services' }, { label: svc.eyebrow }]}
+/>
+
+<section class="section bg-aurora grain">
+  <div class="orb blue" style="width:26rem;height:26rem;left:-8rem;top:2rem"></div>
+  <div class="wrap grid items-center gap-16 lg:grid-cols-[1.05fr_1fr]">
+    <div>
+      <Reveal client:visible><p class="eyebrow">Overview</p></Reveal>
+      <Reveal client:visible delay={0.08}><h2 class="h2 mt-5">{overviewTitle}</h2></Reveal>
+      <Reveal client:visible delay={0.16}>
+        <div class="mt-7 space-y-4 text-[1.02rem] leading-relaxed text-ink/75">
+          {svc.overview.map((p) => <p>{p}</p>)}
+        </div>
+        <ul class="mt-8 flex flex-wrap gap-3">
+          {svc.chips.map((t) => (
+            <li class="rounded-[6px] border border-ink/10 bg-white/80 px-4 py-2 font-display text-[0.78rem] uppercase tracking-[0.12em] text-ink shadow-[0_10px_24px_-16px_rgba(10,34,57,.5)]">{t}</li>
+          ))}
+        </ul>
+        <div class="mt-9 flex flex-wrap gap-4">
+          <a href={BOOK_URL} class="btn btn-primary">Book Appointment</a>
+          <a href={PHONE_HREF} class="btn btn-dark-ghost">Call {PHONE}</a>
+        </div>
+      </Reveal>
+    </div>
+    <Reveal client:visible x={40} y={0}>
+      <div class="plate">
+        <div class="sq shadow-[0_40px_70px_-34px_rgba(10,34,57,.6)]">
+          <img src={`/images/${svc.dir}/b.jpg`} alt={svc.imgB.alt} loading="lazy" style={`object-position:${svc.imgB.pos}`} />
+        </div>
+      </div>
+    </Reveal>
+  </div>
+</section>
+
+<section id="types" class="section bg-sand grain">
+  <div class="wrap">
+    <div class="mx-auto mb-14 max-w-2xl text-center">
+      <Reveal client:visible><p class="eyebrow justify-center">{svc.typesEyebrow}</p></Reveal>
+      <Reveal client:visible delay={0.08}><h2 class="h2 mt-5" set:html={svc.typesTitle} /></Reveal>
+    </div>
+    <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {svc.types.map((x, i) => (
+        <li>
+          <Reveal client:visible delay={i * 0.08} className="h-full">
+            <article class="group flex h-full flex-col overflow-hidden rounded-[10px] bg-white shadow-[0_28px_56px_-30px_rgba(10,34,57,.6)] transition duration-500 hover:-translate-y-2 hover:shadow-[0_40px_70px_-30px_rgba(27,111,184,.55)]">
+              <div class="relative bg-gradient-to-b from-ice to-white px-6 pt-6">
+                <svg viewBox="0 0 160 84" class="w-full transition duration-500 group-hover:scale-[1.04]" role="img" aria-label={x.t}>
+                  <path d="M0 44 Q40 40 80 44 T160 44 V84 H0Z" fill="#f4d9c6" />
+                  <path d="M0 62 Q40 58 80 62 T160 62 V84 H0Z" fill="#e9c1a6" />
+                  <path d="M0 44 Q40 40 80 44 T160 44" fill="none" stroke="#d9a98a" stroke-width="1.5" />
+                  {glyphs[i % 4] === 'drop' && (<g><path d="M80 8 Q98 34 80 40 Q62 34 80 8Z" fill="#1b6fb8" /><circle cx="46" cy="30" r="4" fill="#1b6fb8" opacity=".35" /><circle cx="118" cy="26" r="5" fill="#1b6fb8" opacity=".25" /></g>)}
+                  {glyphs[i % 4] === 'ring' && (<g><circle cx="80" cy="28" r="16" fill="none" stroke="#1b6fb8" stroke-width="3" /><circle cx="80" cy="28" r="6" fill="#1b6fb8" opacity=".5" /><circle cx="44" cy="36" r="4" fill="#1b6fb8" opacity=".3" /><circle cx="118" cy="34" r="4" fill="#1b6fb8" opacity=".3" /></g>)}
+                  {glyphs[i % 4] === 'burst' && (<g stroke="#1b6fb8" stroke-width="3" stroke-linecap="round"><path d="M80 10v14M80 36v-4M56 20l10 10M104 20l-10 10M50 38h12M98 38h12" /><circle cx="80" cy="30" r="5" fill="#1b6fb8" stroke="none" /></g>)}
+                  {glyphs[i % 4] === 'wave' && (<g fill="none" stroke="#1b6fb8" stroke-width="3" stroke-linecap="round"><path d="M40 26 Q54 10 68 26 T96 26 T124 26" /><path d="M48 38 Q60 28 72 38 T96 38 T120 38" opacity=".45" /></g>)}
+                </svg>
+              </div>
+              <div class="flex flex-1 flex-col p-6 pt-5">
+                <h3 class="font-display text-[1.15rem] font-medium leading-snug text-ink">{x.t}</h3>
+                <p class="mt-3 flex-1 text-[0.95rem] leading-relaxed text-ink/70">{x.d}</p>
+                <div class="mt-6 border-t border-ink/10 pt-4">
+                  <span class="inline-block rounded-[4px] bg-ice px-2.5 py-1 font-display text-[0.7rem] font-medium uppercase tracking-[0.12em] text-sapphire">{x.tag}</span>
+                </div>
+              </div>
+            </article>
+          </Reveal>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<section class="section bg-ink text-white">
+  <div class="orb deep" style="width:32rem;height:32rem;right:-10rem;top:-8rem"></div>
+  <div class="wrap grid items-start gap-16 lg:grid-cols-[0.9fr_1.1fr]">
+    <div class="lg:sticky lg:top-28">
+      <Reveal client:visible><p class="eyebrow on-dark">Treatment options</p></Reveal>
+      <Reveal client:visible delay={0.08}><h2 class="h2 on-dark mt-5" set:html={svc.optionsTitle} /></Reveal>
+      <Reveal client:visible delay={0.16}>
+        <p class="mt-6 max-w-md leading-relaxed text-white/70">Your provider chooses care after an exam and a talk with you. This page is general information, not medical advice.</p>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <a href={BOOK_URL} class="btn btn-sand">Book Appointment</a>
+          <a href={PHONE_HREF} class="btn btn-ghost">Call {PHONE}</a>
+        </div>
+      </Reveal>
+    </div>
+    <ul class="space-y-3">
+      {svc.options.map((o, i) => (
+        <li>
+          <Reveal client:visible delay={i * 0.06}>
+            <div class="group flex gap-4 rounded-[8px] border border-white/10 bg-white/[0.05] p-5 transition duration-300 hover:-translate-y-0.5 hover:border-sand/50 hover:bg-white/10">
+              <span class="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-[6px] bg-sapphire font-display text-sm">{i + 1}</span>
+              <div>
+                <h3 class="font-display text-[1.05rem] font-medium">{o.t}</h3>
+                <p class="mt-1 text-[0.93rem] leading-relaxed text-white/70">{o.d}</p>
+              </div>
+            </div>
+          </Reveal>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<section class="section bg-aurora grain">
+  <div class="wrap">
+    <div class="mx-auto mb-14 max-w-2xl text-center">
+      <Reveal client:visible><p class="eyebrow justify-center">Your visit</p></Reveal>
+      <Reveal client:visible delay={0.08}><h2 class="h2 mt-5">What to expect, <b>step by step</b></h2></Reveal>
+    </div>
+    <ol class="grid gap-6 md:grid-cols-4">
+      {svc.steps.map((s, i) => (
+        <li>
+          <Reveal client:visible delay={i * 0.1} className="h-full">
+            <div class="lift relative h-full rounded-[8px] bg-white/85 p-6 shadow-[0_24px_50px_-30px_rgba(10,34,57,.55)]">
+              <span class="font-display text-[2.4rem] font-light leading-none text-sapphire/30">{i + 1}</span>
+              <h3 class="mt-3 font-display text-[1.1rem] font-medium">{s.t}</h3>
+              <p class="mt-2 text-[0.93rem] leading-relaxed text-ink/70">{s.d}</p>
+            </div>
+          </Reveal>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<section class="section bg-sand grain">
+  <div class="wrap mx-auto max-w-3xl">
+    <div class="mb-10 text-center">
+      <Reveal client:visible><p class="eyebrow justify-center">Questions</p></Reveal>
+      <Reveal client:visible delay={0.08}><h2 class="h2 mt-5">{svc.eyebrow} <b>FAQ</b></h2></Reveal>
+    </div>
+    <div class="space-y-3">
+      {svc.faqs.map((f) => (
+        <details class="group rounded-[8px] bg-white p-5 shadow-[0_18px_40px_-28px_rgba(10,34,57,.55)] open:shadow-[0_24px_50px_-26px_rgba(27,111,184,.5)]">
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-[1rem] font-medium text-ink">
+            {f.q}
+            <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-ice text-sapphire transition group-open:rotate-45" aria-hidden="true">+</span>
+          </summary>
+          <p class="mt-3 leading-relaxed text-ink/70">{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="section bg-ink text-white">
+  <div class="orb deep" style="width:30rem;height:30rem;left:-10rem;top:-6rem"></div>
+  <div class="wrap">
+    <div class="mx-auto mb-14 max-w-2xl text-center">
+      <Reveal client:visible><p class="eyebrow on-dark justify-center">{city ? 'Our other clinics' : 'Where we offer it'}</p></Reveal>
+      <Reveal client:visible delay={0.08}><h2 class="h2 on-dark mt-5">{city ? <>{svc.cityLabel} at our <b>other clinics</b></> : <>{svc.cityLabel} at <b>three clinics</b></>}</h2></Reveal>
+      <Reveal client:visible delay={0.16}><p class="mt-5 text-white/70">{city ? 'Closer to another part of town? Every clinic offers the same expert care.' : 'Choose the clinic closest to you. Every location offers the same expert care.'}</p></Reveal>
+    </div>
+    <ul class={`mx-auto grid gap-6 ${city ? 'max-w-4xl md:grid-cols-2' : 'md:grid-cols-3'}`}>
+      {others.map((l, i) => (
+        <li>
+          <Reveal client:visible delay={i * 0.1} className="h-full">
+            <article class="pcard group h-full">
+              <a href={href(l.id)} class="block" aria-label={`${svc.name} in ${l.city}`}><div class="shot"><div class="sq"><img src={l.img} alt={`Reception area at our ${l.city} clinic`} loading="lazy" /><span class="sheen"></span></div></div></a>
+              <div class="flex flex-1 flex-col px-3 pb-3 pt-6">
+                <h3 class="font-display text-[1.3rem] font-medium">{l.city}</h3>
+                <p class="mt-2 text-[0.95rem] leading-relaxed text-white/70">{l.line1}<br />{l.line2}</p>
+                <div class="mt-auto flex flex-wrap gap-3 pt-6">
+                  <a href={href(l.id)} class="btn btn-primary btn-sm">{svc.cityLabel} in {l.city}</a>
+                  <a href={BOOK_URL} class="btn btn-ghost btn-sm">Book visit</a>
+                </div>
+              </div>
+            </article>
+          </Reveal>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<section class="section bg-aurora grain">
+  <div class="orb sand" style="width:24rem;height:24rem;right:-6rem;top:-4rem"></div>
+  <div class="wrap">
+    <div class="rounded-[10px] bg-gradient-to-br from-navy to-sapphire p-10 text-center text-white shadow-[0_50px_90px_-40px_rgba(27,111,184,.8)] md:p-16">
+      <Reveal client:visible><h2 class="font-display text-[clamp(1.9rem,4vw,3rem)] font-light leading-tight">{ctaTitle}</h2></Reveal>
+      <Reveal client:visible delay={0.1}><p class="mx-auto mt-4 max-w-xl text-white/80">{svc.cta}</p></Reveal>
+      <Reveal client:visible delay={0.2}>
+        <div class="mt-8 flex flex-wrap justify-center gap-4">
+          <a href={BOOK_URL} class="btn btn-sand">Book Appointment</a>
+          <a href={PHONE_HREF} class="btn btn-ghost">Call {PHONE}</a>
+        </div>
+      </Reveal>
+    </div>
+    <div class="mt-12 flex flex-wrap items-center justify-center gap-3">
+      <span class="font-display text-[0.75rem] uppercase tracking-[0.2em] text-ink/60">Related care</span>
+      {related.map((r) => <a href={`/services/${r.slug}`} class="btn btn-dark-ghost btn-sm">{r.label}</a>)}
+      <a href="/services" class="btn btn-dark-ghost btn-sm">All services</a>
+    </div>
+  </div>
+</section>

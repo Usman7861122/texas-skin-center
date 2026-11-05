@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/sections/PageHero.astro';
+import Locations from '../../components/sections/Locations.astro';
+import Insurance from '../../components/sections/Insurance.astro';
+import Reveal from '../../components/islands/Reveal';
+import ServiceTabs from '../../components/islands/ServiceTabs';
+import { BOOK_URL, PHONE, PHONE_HREF } from '../../data/site';
+
+const tabs = [
+  { id: 'all', label: 'All services', blurb: 'Medical, surgical and cosmetic care, all at our three clinics.' },
+  { id: 'medical', label: 'Medical', blurb: 'Treatment for common and long-lasting skin conditions, for children and adults.' },
+  { id: 'surgical', label: 'Surgical', blurb: 'Careful removal of skin cancers that protects as much healthy skin as possible.' },
+  { id: 'cosmetic', label: 'Cosmetic', blurb: 'Natural-looking treatments that refresh your skin and soften signs of aging.' },
+];
+const items = [
+  { cat: 'medical', t: 'Acne', d: 'Clear, steady plans for teens and adults.', href: '/services/acne', img: '/images/acne/exam.jpg' },
+  { cat: 'medical', t: 'Eczema', d: 'Calm dry, itchy skin.', href: '/services/eczema', img: '/images/eczema/a.jpg' },
+  { cat: 'medical', t: 'Rosacea', d: 'Reduce flushing and redness.', href: '/services/rosacea', img: '/images/rosacea/a.jpg' },
+  { cat: 'medical', t: 'Actinic Keratosis', d: 'Treat sun-damaged spots early.', href: '/services/actinic-keratosis', img: '/images/actinic-keratosis/a.jpg' },
+  { cat: 'medical', t: 'Hair Loss (PRP)', d: 'Support thicker, healthier hair.', href: '/services/hair-loss-prp', img: '/images/hair-loss-prp/a.jpg' },
+  { cat: 'medical', t: 'Pediatric Dermatology', d: 'Gentle skin care for babies, kids and teens.', href: '/services/pediatric-dermatology', img: '/images/pediatric-dermatology/a.jpg' },
+  { cat: 'surgical', t: 'Mohs Surgery', d: 'Precise skin cancer removal that protects healthy tissue.', href: '/services/mohs-surgery', img: '/images/stock/mohs.jpg' },
+  { cat: 'cosmetic', t: 'Botox', d: 'Soften lines naturally.', href: '/services/botox', img: '/images/botox/a.jpg' },
+  { cat: 'cosmetic', t: 'Fillers', d: 'Restore volume and smooth folds.', href: '/services/fillers', img: '/images/fillers/a.jpg' },
+  { cat: 'cosmetic', t: 'Chemical Peels', d: 'Renew tone, texture and glow.', href: '/services/chemical-peels', img: '/images/chemical-peels/a.jpg' },
+  { cat: 'cosmetic', t: 'IPL Treatment', d: 'Even out redness and spots.', href: '/services/ipl-treatment', img: '/images/ipl/a.jpg' },
+  { cat: 'cosmetic', t: 'Laser Skin Resurfacing', d: 'Refresh sun-worn skin.', href: '/services/laser-skin-resurfacing', img: '/images/laser-skin-resurfacing/a.jpg' },
+  { cat: 'cosmetic', t: 'Fractionated Resurfacing', d: 'Smoother, firmer skin.', href: '/services/fractionated-resurfacing', img: '/images/fractionated-resurfacing/a.jpg' },
+];
+---
+<BaseLayout title="Our Services | Texas Skin Center" description="Medical, surgical and cosmetic dermatology at Texas Skin Center in Pearland, Houston and Kingwood, TX. Acne, eczema, Mohs surgery, Botox, fillers and more.">
+  <PageHero
+    eyebrow="Our services"
+    title="Everything your skin needs,"
+    accent="in one place."
+    lead="Medical, surgical and cosmetic dermatology for the whole family, at three clinics in Pearland, Houston and Kingwood."
+    image="/images/DSC00569-scaled.jpg"
+    alt="A dermatology team member carefully examining a patient's arm"
+    pos="50% 40%"
+    ctaLabel="Browse services"
+    ctaHref="#services-list"
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'Services' }]}
+  />
+
+  <section id="services-list" class="section bg-sand grain">
+    <div class="orb blue" style="width:24rem;height:24rem;right:-8rem;top:-4rem"></div>
+    <div class="orb deep" style="width:22rem;height:22rem;left:-8rem;bottom:-4rem;opacity:.25"></div>
+    <div class="wrap">
+      <div class="mx-auto mb-10 max-w-2xl text-center">
+        <Reveal client:visible><p class="eyebrow justify-center">Browse by category</p></Reveal>
+        <Reveal client:visible delay={0.08}><h2 class="h2 mt-5">Find the <b>care you need</b></h2></Reveal>
+      </div>
+      <ServiceTabs client:load tabs={tabs} items={items} />
+    </div>
+  </section>
+
+  <section class="section bg-ink text-white">
+    <div class="orb deep" style="width:30rem;height:30rem;left:-10rem;top:-6rem"></div>
+    <div class="wrap">
+      <div class="rounded-[10px] bg-gradient-to-br from-navy to-sapphire p-10 text-center shadow-[0_50px_90px_-40px_rgba(27,111,184,.8)] md:p-16">
+        <Reveal client:visible><h2 class="font-display text-[clamp(1.9rem,4vw,3rem)] font-light leading-tight">Not sure which service you need?</h2></Reveal>
+        <Reveal client:visible delay={0.1}><p class="mx-auto mt-4 max-w-xl text-white/80">Book a visit and our providers will look at your skin, answer your questions and suggest the right next step.</p></Reveal>
+        <Reveal client:visible delay={0.2}>
+          <div class="mt-8 flex flex-wrap justify-center gap-4">
+            <a href={BOOK_URL} class="btn btn-sand">Book Appointment</a>
+            <a href={PHONE_HREF} class="btn btn-ghost">Call {PHONE}</a>
+          </div>
+        </Reveal>
+      </div>
+    </div>
+  </section>
+
+  <Insurance />
+  <Locations />
+</BaseLayout>

@@ -1,0 +1,57 @@
+---
+import { site, media, locations, PHONE, PHONE_HREF } from '../data/site';
+const year = new Date().getFullYear();
+---
+<footer class="relative overflow-hidden bg-[#06182a] text-white">
+  <div class="orb deep" style="width:26rem;height:26rem;right:-8rem;top:-10rem;opacity:.25"></div>
+  <div class="relative z-10 mx-auto max-w-[84rem] px-6 pb-8 pt-20">
+    <div class="grid gap-12 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1.2fr_1fr]">
+      <div>
+        <span class="inline-block rounded-[6px] bg-white px-4 py-2.5 shadow-[0_14px_30px_-16px_rgba(0,0,0,.6)]"><img src={media.logo} alt="Texas Skin Center" class="block h-9 w-auto" loading="lazy" /></span>
+        <p class="mt-6 max-w-xs leading-relaxed text-white/65">{site.tagline}</p>
+        <a href={PHONE_HREF} class="btn btn-sand mt-6">Call {PHONE}</a>
+      </div>
+      <nav aria-label="Quick links">
+        <h3 class="font-display text-[0.75rem] uppercase tracking-[0.25em] text-sand">Quick links</h3>
+        <ul class="mt-5 space-y-3 text-white/70">
+          {[['Home', '/'], ['About Us', '/about-us'], ['Services', '/services'], ['Providers', '/providers'], ['Contact', '/contact-us']].map(([l, h]) => (
+            <li><a href={h} class="inline-block transition hover:translate-x-1 hover:text-white">{l}</a></li>
+          ))}
+        </ul>
+      </nav>
+      <div>
+        <h3 class="font-display text-[0.75rem] uppercase tracking-[0.25em] text-sand">Locations</h3>
+        <ul class="mt-5 space-y-4 text-white/70">
+          {locations.map((l) => (
+            <li><span class="block font-display text-white">{l.city}</span>{l.line1}, {l.line2}</li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-display text-[0.75rem] uppercase tracking-[0.25em] text-sand">More</h3>
+        <ul class="mt-5 space-y-3 text-white/70">
+          {[['Articles', '/blog'], ['Telemedicine', '/telemedicine'], ['Testimonials', '/testimonials']].map(([l, h]) => (
+            <li><a href={h} class="inline-block transition hover:translate-x-1 hover:text-white">{l}</a></li>
+          ))}
+        </ul>
+        <a href="#main" class="btn btn-ghost mt-8 !px-4 !py-2.5 !text-[0.78rem]">Back to top ↑</a>
+      </div>
+    </div>
+
+    <div class="mt-16 flex flex-col items-start justify-between gap-4 border-t border-white/10 pt-6 text-[0.85rem] text-white/50 md:flex-row md:items-center">
+      <p>© {year} {site.name}. All rights reserved.</p>
+      <ul class="flex flex-wrap gap-2.5">
+        <li><a class="btn btn-chip" href="/blog">Articles</a></li>
+        <li><a class="btn btn-chip" href="/terms-condition">Terms &amp; Conditions</a></li>
+        <li><a class="btn btn-chip" href="/privacy-policy">Privacy Policy</a></li>
+        <li><a class="btn btn-chip" href="/notice-of-privacy-practices">HIPAA Notice</a></li>
+        <li><a class="btn btn-chip" href="/accessibility-statement">Accessibility</a></li>
+        <li><a class="btn btn-chip" href="/cookie-policy">Cookie Policy</a></li>
+        <li><button type="button" class="btn btn-chip" id="open-cookies">Cookie settings</button></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script>
+  document.getElementById('open-cookies')?.addEventListener('click', () => window.dispatchEvent(new Event('tsc:open-cookies')));
+</script>

@@ -1,0 +1,18 @@
+---
+import Reveal from '../islands/Reveal';
+import StackedGallery from '../islands/StackedGallery';
+import { gallery, BOOK_URL } from '../../data/site';
+---
+<section id="gallery" class="section bg-aurora grain">
+  <div class="orb sand" style="width:26rem;height:26rem;right:-8rem;top:-4rem"></div>
+  <div class="orb deep" style="width:24rem;height:24rem;left:-9rem;bottom:-6rem;opacity:.25;animation-delay:-6s"></div>
+  <div class="wrap">
+    <div class="mx-auto mb-6 max-w-2xl text-center">
+      <Reveal client:visible><p class="eyebrow justify-center">Inside our clinics</p></Reveal>
+      <Reveal client:visible delay={0.08}><h2 class="h2 mt-5">A look at <b>life at Texas Skin Center</b></h2></Reveal>
+      <Reveal client:visible delay={0.16}><p class="mt-5 text-lg text-ink/70">Drag the photos, or use the buttons, to meet the team that cares for your skin.</p></Reveal>
+    </div>
+    <StackedGallery client:visible slides={gallery} />
+    <div class="mt-10 text-center"><a href={BOOK_URL} class="btn btn-primary">Book your visit</a></div>
+  </div>
+</section>

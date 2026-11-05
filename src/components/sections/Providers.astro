@@ -1,0 +1,55 @@
+---
+import Reveal from '../islands/Reveal';
+import { providers, BOOK_URL } from '../../data/site';
+---
+<section id="providers" class="section bg-ink">
+  <div class="orb deep" style="width:34rem;height:34rem;right:-12rem;top:-10rem"></div>
+  <div class="orb sand" style="width:20rem;height:20rem;left:-6rem;bottom:-5rem;opacity:.18;animation-delay:-5s"></div>
+
+  <div class="wrap">
+    <div class="mx-auto mb-16 max-w-2xl text-center">
+      <Reveal client:visible><p class="eyebrow on-dark justify-center">Our providers</p></Reveal>
+      <Reveal client:visible delay={0.08}><h2 class="h2 on-dark mt-5">Consultation with <b>our experts</b></h2></Reveal>
+    </div>
+
+    <ul class="flex flex-wrap justify-center gap-8">
+      {providers.map((p, i) => (
+        <li class="flex w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.34rem)]">
+          <Reveal client:visible delay={(i % 3) * 0.12} className="flex w-full">
+            <article class="pcard group">
+              <a href={p.href} class="block" aria-label={`View profile: ${p.name}`}>
+              <div class="shot">
+                <div class="sq">
+                  <img src={p.img} alt={`Portrait of ${p.name}`} loading="lazy" style={`object-position:${p.pos}`} />
+                  <span class="sheen"></span>
+                  <div class="absolute inset-x-0 bottom-0 z-[1] h-2/5 bg-gradient-to-t from-ink/85 via-ink/30 to-transparent"></div>
+                  <ul class="absolute bottom-3 left-3 z-[2] flex flex-wrap gap-1.5">
+                    {p.badges.map((b) => (
+                      <li class="rounded-[4px] bg-white/90 px-2.5 py-1 font-display text-[0.66rem] font-medium uppercase tracking-[0.12em] text-ink">{b}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              </a>
+
+              <div class="flex flex-1 flex-col px-3 pb-3 pt-6">
+                <h3 class="font-display text-[1.35rem] font-medium leading-snug text-white">{p.name}</h3>
+                <p class="mt-1.5 text-[0.92rem] leading-snug text-sand">{p.role}</p>
+                <div class="my-5 h-px w-12 bg-gradient-to-r from-sand to-transparent transition-all duration-700 group-hover:w-full"></div>
+                <p class="text-[0.95rem] leading-relaxed text-white/70">{p.note}</p>
+                <div class="mt-auto flex flex-wrap gap-3 pt-7">
+                  <a href={p.href} class="btn btn-primary btn-sm">View profile</a>
+                  <a href={BOOK_URL} class="btn btn-ghost btn-sm">Book visit</a>
+                </div>
+              </div>
+            </article>
+          </Reveal>
+        </li>
+      ))}
+    </ul>
+
+    <Reveal client:visible>
+      <div class="mt-16 text-center"><a href="/providers" class="btn btn-sand">Meet the full team</a></div>
+    </Reveal>
+  </div>
+</section>

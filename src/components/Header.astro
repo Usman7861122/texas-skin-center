@@ -1,0 +1,6 @@
+---
+import SiteHeader from './islands/SiteHeader';
+import { nav, BOOK_URL, PAY_URL, PHONE, PHONE_HREF, media } from '../data/site';
+const path = Astro.url.pathname;
+---
+<SiteHeader client:load nav={nav} bookUrl={BOOK_URL} payUrl={PAY_URL} phone={PHONE} phoneHref={PHONE_HREF} logo={media.logo} path={path} />

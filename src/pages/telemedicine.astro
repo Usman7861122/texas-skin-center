@@ -1,0 +1,136 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+import Reveal from '../components/islands/Reveal';
+import { BOOK_URL, PHONE, PHONE_HREF, locations } from '../data/site';
+
+const steps = [
+  { t: 'Book your visit', d: 'Choose a telemedicine time online or call us. Tell us what is bothering your skin.' },
+  { t: 'Get ready', d: 'Find a quiet, bright place. Test your phone, tablet or computer and have your medicine list close.' },
+  { t: 'Meet your provider', d: 'Join by video. Show the area of concern in good light and talk through your questions.' },
+  { t: 'Start your plan', d: 'Your provider explains the next steps and sends any prescription to your pharmacy, if needed.' },
+];
+const good = [
+  { t: 'Acne check-ins', d: 'Review how your plan is working and adjust it.' },
+  { t: 'Eczema and rashes', d: 'Many common rashes can be seen well on video.' },
+  { t: 'Rosacea follow-ups', d: 'Check redness and change your care if needed.' },
+  { t: 'Medicine questions', d: 'Ask about side effects, refills and how to use a treatment.' },
+  { t: 'Results reviews', d: 'Look at progress after a procedure.' },
+  { t: 'Second opinions', d: 'Talk through a skin concern before you come in.' },
+];
+const inPerson = ['Full-body skin cancer checks', 'Spots that change, bleed or look new', 'Mohs surgery and other procedures', 'Injectables, lasers and peels'];
+const faqs = [
+  { q: 'Do I need special equipment?', a: 'You need a phone, tablet or computer with a camera, a microphone and an internet connection. We send you simple steps to join.' },
+  { q: 'Is a telemedicine visit private?', a: 'Please join from a private place. We use secure tools for video visits, and we protect your information as described in our Notice of Privacy Practices.' },
+  { q: 'Will my insurance cover it?', a: 'Many plans cover telemedicine, but coverage differs. Call us at 346-888-4400 and we will help check your plan.' },
+  { q: 'What if my provider needs to see me in person?', a: 'Then we book a clinic visit for you in Pearland, Houston or Kingwood. You will not lose time starting over.' },
+  { q: 'Can I get a prescription?', a: 'If your provider decides it is right for you, they can send a prescription to your pharmacy.' },
+];
+---
+<BaseLayout title="Telemedicine | Dermatology Video Visits | Texas Skin Center" description="See a Texas Skin Center dermatology provider by video from home. Easy booking, clear plans, and in-person care at our Pearland, Houston and Kingwood clinics when you need it.">
+  <PageHero
+    eyebrow="Telemedicine"
+    title="See your dermatologist,"
+    accent="from home."
+    lead="Video visits for many common skin concerns. No drive, no waiting room, and the same caring team."
+    image="/images/DSC06222-scaled.jpg"
+    alt="A Texas Skin Center team member smiling while working at a laptop"
+    pos="50% 35%"
+    ctaLabel="How it works"
+    ctaHref="#how"
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'Telemedicine' }]}
+  />
+
+  <section id="how" class="section bg-aurora grain scroll-mt-20">
+    <div class="orb sand" style="width:26rem;height:26rem;right:-8rem;top:-4rem"></div>
+    <div class="wrap">
+      <Reveal client:visible><p class="eyebrow">How it works</p></Reveal>
+      <Reveal client:visible delay={0.08}><h2 class="h2 mt-4">Four easy steps to <b>your visit.</b></h2></Reveal>
+      <ol class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {steps.map((s, i) => (
+          <li>
+            <Reveal client:visible delay={i * 0.08} className="h-full">
+              <div class="lift h-full rounded-[8px] bg-white p-7 shadow-[0_28px_56px_-30px_rgba(10,34,57,.55)]">
+                <span class="grid h-10 w-10 place-items-center rounded-[6px] bg-sapphire font-display text-sm font-medium text-white">{i + 1}</span>
+                <h3 class="mt-5 font-display text-lg font-medium">{s.t}</h3>
+                <p class="mt-2 text-[0.95rem] leading-relaxed text-ink/70">{s.d}</p>
+              </div>
+            </Reveal>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section bg-sand grain">
+    <div class="wrap grid items-start gap-12 lg:grid-cols-[1fr_1fr]">
+      <div>
+        <Reveal client:visible><p class="eyebrow">Good for</p></Reveal>
+        <Reveal client:visible delay={0.08}><h2 class="h2 mt-4">What we can do <b>by video.</b></h2></Reveal>
+        <ul class="mt-8 grid gap-4 sm:grid-cols-2">
+          {good.map((g, i) => (
+            <li>
+              <Reveal client:visible delay={i * 0.05} className="h-full">
+                <div class="h-full rounded-[8px] bg-white p-5 shadow-[0_20px_40px_-26px_rgba(10,34,57,.5)]">
+                  <p class="font-display font-medium">{g.t}</p>
+                  <p class="mt-1 text-sm leading-relaxed text-ink/65">{g.d}</p>
+                </div>
+              </Reveal>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <Reveal client:visible delay={0.15} x={40} y={0}>
+        <div class="rounded-[10px] bg-ink p-8 text-white shadow-[0_50px_90px_-40px_rgba(10,34,57,.8)] md:p-10">
+          <p class="eyebrow on-dark">Better in person</p>
+          <h3 class="mt-4 font-display text-2xl font-light">Some care needs a <span class="font-semibold text-sand">hands-on visit.</span></h3>
+          <ul class="mt-6 space-y-3">
+            {inPerson.map((t) => <li class="flex gap-3 text-white/80"><span class="mt-[0.6rem] h-1.5 w-1.5 shrink-0 rounded-full bg-sand"></span>{t}</li>)}
+          </ul>
+          <p class="mt-6 text-sm text-white/60">Your provider will tell you if you need to come in. We have clinics in {locations.map((l) => l.city).join(', ').replace(/, ([^,]*)$/, ' and $1')}.</p>
+          <div class="mt-7 flex flex-wrap gap-3">
+            <a href="/locations" class="btn btn-ghost btn-sm">Find a clinic</a>
+          </div>
+        </div>
+      </Reveal>
+    </div>
+  </section>
+
+  <section class="section bg-aurora grain">
+    <div class="wrap grid items-start gap-12 lg:grid-cols-[0.8fr_1.2fr]">
+      <div>
+        <Reveal client:visible><p class="eyebrow">Questions</p></Reveal>
+        <Reveal client:visible delay={0.08}><h2 class="h2 mt-4">Telemedicine <b>FAQ.</b></h2></Reveal>
+        <p class="mt-5 max-w-sm leading-relaxed text-ink/70">Still unsure? Call us and we will help you choose the right kind of visit.</p>
+        <a href={PHONE_HREF} class="btn btn-primary mt-7">Call {PHONE}</a>
+      </div>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="group rounded-[8px] bg-white p-5 shadow-[0_20px_40px_-28px_rgba(10,34,57,.5)]">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-display font-medium">
+              {f.q}
+              <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-ice text-sapphire transition group-open:rotate-45" aria-hidden="true">+</span>
+            </summary>
+            <p class="mt-3 leading-relaxed text-ink/70">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-ink text-white">
+    <div class="orb deep" style="width:30rem;height:30rem;left:-10rem;top:-6rem"></div>
+    <div class="wrap">
+      <div class="mx-auto max-w-2xl text-center">
+        <Reveal client:visible><h2 class="font-display text-[clamp(1.9rem,4vw,3rem)] font-light leading-tight">Care that comes <span class="font-semibold text-sand">to you.</span></h2></Reveal>
+        <Reveal client:visible delay={0.1}><p class="mt-5 text-white/75">Book a video visit, or choose a clinic if you prefer to come in.</p></Reveal>
+        <Reveal client:visible delay={0.2}>
+          <div class="mt-8 flex flex-wrap justify-center gap-4">
+            <a href={BOOK_URL} class="btn btn-sand">Book Appointment</a>
+            <a href={PHONE_HREF} class="btn btn-ghost">Call {PHONE}</a>
+          </div>
+        </Reveal>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

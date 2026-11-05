@@ -1,0 +1,36 @@
+---
+import Reveal from '../islands/Reveal';
+import ContactForm from '../islands/ContactForm';
+import { PHONE, PHONE_HREF, BOOK_URL, PAY_URL, locations } from '../../data/site';
+---
+<section id="contact" class="section bg-ink">
+  <div class="orb deep" style="width:32rem;height:32rem;left:-10rem;top:-8rem"></div>
+  <div class="orb sand" style="width:20rem;height:20rem;right:-4rem;bottom:-4rem;opacity:.15;animation-delay:-4s"></div>
+  <div class="wrap grid items-start gap-14 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
+    <div>
+      <Reveal client:visible><p class="eyebrow on-dark">Get in touch</p></Reveal>
+      <Reveal client:visible delay={0.08}><h2 class="h2 on-dark mt-5">Ready for <b>healthier skin?</b></h2></Reveal>
+      <Reveal client:visible delay={0.16}>
+        <p class="mt-6 max-w-md text-lg leading-relaxed text-white/75">Book online, call us, or send a message. We offer same-day appointments across all three clinics.</p>
+      </Reveal>
+      <Reveal client:visible delay={0.24}>
+        <ul class="mt-10 space-y-4">
+          <li>
+            <a href={PHONE_HREF} class="group flex items-center gap-4 rounded-[6px] border border-white/15 bg-white/[0.05] p-5 transition duration-500 hover:-translate-y-1 hover:border-sand/60 hover:bg-white/10">
+              <span class="grid h-12 w-12 place-items-center rounded-[6px] bg-sapphire"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg></span>
+              <span><span class="block text-sm text-white/55">Call us</span><span class="font-display text-xl">{PHONE}</span></span>
+            </a>
+          </li>
+          <li>
+            <a href={BOOK_URL} class="group flex items-center gap-4 rounded-[6px] border border-white/15 bg-white/[0.05] p-5 transition duration-500 hover:-translate-y-1 hover:border-sand/60 hover:bg-white/10">
+              <span class="grid h-12 w-12 place-items-center rounded-[6px] bg-sapphire"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span>
+              <span><span class="block text-sm text-white/55">Book online</span><span class="font-display text-xl">Book appointment</span></span>
+            </a>
+          </li>
+          <li class="flex flex-wrap items-center gap-4 pt-2 text-sm text-white/55">Pearland · Houston · Kingwood <a class="btn btn-chip" href={PAY_URL}>Pay online</a></li>
+        </ul>
+      </Reveal>
+    </div>
+    <Reveal client:visible delay={0.15} x={40} y={0}><ContactForm client:visible /></Reveal>
+  </div>
+</section>

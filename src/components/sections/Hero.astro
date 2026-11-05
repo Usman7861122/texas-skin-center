@@ -1,0 +1,42 @@
+---
+import HeroTagline from '../islands/HeroTagline';
+import { heroLines, BOOK_URL, PHONE, PHONE_HREF, media, locations } from '../../data/site';
+---
+<section class="relative isolate flex min-h-[100svh] items-end overflow-hidden bg-ink" aria-label="Welcome">
+  <video
+    id="hero-video"
+    class="absolute inset-0 -z-20 h-full w-full object-cover"
+    autoplay muted loop playsinline preload="auto"
+    poster={media.heroPoster}
+  >
+    <source src={media.heroVideo} type="video/mp4" />
+  </video>
+
+  <!-- layered veils keep text readable and add depth -->
+  <div class="absolute inset-0 -z-10 bg-gradient-to-r from-ink/95 via-ink/70 to-ink/20"></div>
+  <div class="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_60%_at_25%_65%,rgba(6,24,42,.65),transparent_75%)]"></div>
+  <div class="absolute inset-0 -z-10 bg-gradient-to-t from-ink/80 via-transparent to-ink/50"></div>
+  <div class="orb blue -z-10" style="width:28rem;height:28rem;left:-8rem;bottom:-6rem;opacity:.25"></div>
+
+  <div class="mx-auto w-full max-w-[84rem] px-6 pb-28 pt-44 md:pb-32">
+    <HeroTagline client:load lines={heroLines} bookUrl={BOOK_URL} phone={PHONE} phoneHref={PHONE_HREF} />
+  </div>
+
+  <!-- bottom strip: three clinics + scroll cue -->
+  <div class="absolute inset-x-0 bottom-0 border-t border-white/15 bg-ink/40 backdrop-blur-md">
+    <div class="mx-auto flex max-w-[84rem] items-center justify-between gap-6 px-6 py-4">
+      <ul class="flex flex-wrap gap-x-8 gap-y-1 font-display text-[0.78rem] uppercase tracking-[0.2em] text-white/80">
+        {locations.map((l) => <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-sand"></span>{l.city}</li>)}
+      </ul>
+      <a href="#about" class="hidden items-center gap-3 font-display text-[0.72rem] uppercase tracking-[0.25em] text-white/80 transition hover:text-white md:flex" aria-label="Scroll to about">
+        Scroll <span class="cue"></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Respect reduced motion: show the poster instead of a moving video.
+  const v = document.getElementById('hero-video') as HTMLVideoElement | null;
+  if (v && window.matchMedia('(prefers-reduced-motion: reduce)').matches) { v.pause(); v.removeAttribute('autoplay'); }
+</script>

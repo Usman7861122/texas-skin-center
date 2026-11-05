@@ -1,0 +1,8 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import AcnePage from '../../../components/sections/AcnePage.astro';
+import { generalNearby } from '../../../data/site';
+---
+<BaseLayout title="Acne Treatment | Texas Skin Center" description="Expert acne treatment for teens and adults at Texas Skin Center, with clinics in Pearland, Houston and Kingwood, TX and same-day appointments.">
+  <AcnePage nearby={generalNearby} />
+</BaseLayout>

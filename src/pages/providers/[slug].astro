@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProviderPage from '../../components/sections/ProviderPage.astro';
+import { providers } from '../../data/site';
+import { providerPages } from '../../data/providerPages';
+export function getStaticPaths() {
+  return providerPages.map((d) => ({ params: { slug: d.slug }, props: { d } }));
+}
+const { d } = Astro.props;
+const name = providers.find((p) => p.href === `/providers/${d.slug}`)!.name;
+---
+<BaseLayout title={`${name} | Texas Skin Center`} description={d.metaDescription}>
+  <ProviderPage d={d} />
+</BaseLayout>

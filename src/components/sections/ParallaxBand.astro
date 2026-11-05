@@ -1,0 +1,33 @@
+---
+import Reveal from '../islands/Reveal';
+import { media } from '../../data/site';
+---
+<!-- Faces stay visible in the top of the photo; all text sits in the lower part, over bodies and floor. -->
+<section class="parallax relative flex min-h-[100svh] items-end overflow-hidden text-white" style={`background-image:url('${media.parallax}'); background-position: 50% 12%`} aria-label="Expertise and excellence">
+  <div class="absolute inset-0 bg-gradient-to-b from-transparent from-35% via-ink/55 via-60% to-ink/95"></div>
+
+  <div class="relative z-10 mx-auto w-full max-w-[84rem] px-6 pb-16 pt-[55vh] md:pb-20">
+    <div class="grid items-end gap-8 lg:grid-cols-[1.3fr_1fr] lg:gap-16">
+      <div>
+        <Reveal client:visible><p class="eyebrow on-dark">About</p></Reveal>
+        <Reveal client:visible delay={0.1}>
+          <h2 class="mt-5 font-display text-[clamp(2.2rem,5.2vw,4.25rem)] font-light leading-[1.05] tracking-[-0.02em]">
+            Expertise &amp; <span class="font-semibold text-sand">Excellence</span> Focus
+          </h2>
+        </Reveal>
+      </div>
+      <div>
+        <Reveal client:visible delay={0.2}>
+          <p class="max-w-md text-lg leading-relaxed text-white/90">Everything you need to feel healthy and beautiful.</p>
+        </Reveal>
+        <Reveal client:visible delay={0.3}>
+          <ul class="mt-6 flex flex-wrap gap-3 font-display text-[0.75rem] uppercase tracking-[0.22em]">
+            {['Medical', 'Surgical', 'Cosmetic'].map((t) => (
+              <li class="rounded-[6px] border border-white/30 bg-white/10 px-5 py-2.5 backdrop-blur-md transition hover:-translate-y-1 hover:border-sand hover:bg-white/20">{t}</li>
+            ))}
+          </ul>
+        </Reveal>
+      </div>
+    </div>
+  </div>
+</section>

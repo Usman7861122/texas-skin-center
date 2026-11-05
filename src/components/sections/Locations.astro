@@ -1,0 +1,16 @@
+---
+import Reveal from '../islands/Reveal';
+import LocationTabs from '../islands/LocationTabs';
+import { locations, PHONE, PHONE_HREF, BOOK_URL } from '../../data/site';
+---
+<section id="locations" class="section bg-sand grain">
+  <div class="orb blue" style="width:28rem;height:28rem;left:-10rem;top:-6rem"></div>
+  <div class="orb deep" style="width:24rem;height:24rem;right:-8rem;bottom:-6rem;animation-delay:-7s"></div>
+  <div class="wrap">
+    <div class="mx-auto mb-12 max-w-2xl text-center">
+      <Reveal client:visible><p class="eyebrow justify-center">Locations</p></Reveal>
+      <Reveal client:visible delay={0.08}><h2 class="h2 mt-5">Three clinics, <b>one trusted team</b></h2></Reveal>
+    </div>
+    <LocationTabs client:visible locations={locations} phone={PHONE} phoneHref={PHONE_HREF} bookUrl={BOOK_URL} />
+  </div>
+</section>

@@ -1,0 +1,56 @@
+---
+import Reveal from '../islands/Reveal';
+import { BOOK_URL } from '../../data/site';
+interface Props { eyebrow: string; title: string; accent?: string; lead: string; image: string; alt: string; pos?: string; crumbs: { label: string; href?: string }[]; ctaLabel?: string; ctaHref?: string; nearby?: string; }
+const { eyebrow, title, accent, lead, image, alt, pos = '50% 30%', crumbs, ctaLabel = 'Our story', ctaHref = '#story', nearby } = Astro.props;
+---
+<section class="relative isolate overflow-hidden bg-ink pb-20 pt-40 text-white md:pb-28 md:pt-48">
+  <div class="orb deep" style="width:34rem;height:34rem;right:-10rem;top:-12rem"></div>
+  <div class="orb sand" style="width:20rem;height:20rem;left:-6rem;bottom:-6rem;opacity:.16;animation-delay:-4s"></div>
+  <div class="mx-auto grid max-w-[84rem] items-center gap-12 px-6 lg:grid-cols-[1.05fr_1fr]">
+    <div>
+      <Reveal client:load>
+        <nav aria-label="Breadcrumb">
+          <ol class="flex flex-wrap items-center gap-2 text-[0.8rem] text-white/60">
+            {crumbs.map((c, i) => (
+              <li class="flex items-center gap-2">
+                {i > 0 && <span aria-hidden="true">/</span>}
+                {c.href ? <a href={c.href} class="text-white/70 underline-offset-4 transition hover:text-white hover:underline">{c.label}</a> : <span class="text-sand" aria-current="page">{c.label}</span>}
+              </li>
+            ))}
+          </ol>
+        </nav>
+      </Reveal>
+      <Reveal client:load delay={0.08}><p class="eyebrow on-dark mt-8">{eyebrow}</p></Reveal>
+      <Reveal client:load delay={0.16}>
+        <h1 class="mt-5 font-display text-[clamp(2.4rem,5.4vw,4.4rem)] font-light leading-[1.05] tracking-[-0.02em]">
+          {title} {accent && <span class="font-semibold text-sand">{accent}</span>}
+        </h1>
+      </Reveal>
+      <Reveal client:load delay={0.24}><p class="mt-6 max-w-xl text-lg leading-relaxed text-white/80">{lead}</p></Reveal>
+      <Reveal client:load delay={0.32}>
+        <div class="mt-9 flex flex-wrap gap-4">
+          <a href={BOOK_URL} class="btn btn-primary">Book Appointment</a>
+          <a href={ctaHref} class="btn btn-ghost">{ctaLabel}</a>
+        </div>
+      </Reveal>
+    </div>
+    <Reveal client:load delay={0.2} x={40} y={0}>
+      <div class="plate">
+        <div class="sq shadow-[0_50px_80px_-40px_rgba(0,0,0,.8)]">
+          <img src={image} alt={alt} class="kenburns" style={`object-position:${pos}`} />
+        </div>
+      </div>
+    </Reveal>
+  </div>
+  {nearby && (
+    <div class="mx-auto mt-16 max-w-[84rem] px-6 md:mt-20">
+      <Reveal client:load delay={0.4}>
+        <div class="flex items-start gap-4 border-t border-white/15 pt-8">
+          <svg class="mt-1 shrink-0 text-sand" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.4-6.5-11a6.5 6.5 0 0 1 13 0c0 5.6-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg>
+          <p class="text-[1.05rem] font-light leading-relaxed text-white/70 md:text-lg">{nearby}</p>
+        </div>
+      </Reveal>
+    </div>
+  )}
+</section>

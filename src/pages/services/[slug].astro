@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ServicePage from '../../components/sections/ServicePage.astro';
+import { locations, acneNearby, generalNearby } from '../../data/site';
+import { services } from '../../data/services';
+
+export function getStaticPaths() {
+  const paths: any[] = [];
+  for (const s of services) {
+    paths.push({ params: { slug: s.slug }, props: { svc: s, nearby: generalNearby } });
+    for (const l of locations) paths.push({ params: { slug: `${s.slug}-${l.id}` }, props: { svc: s, city: l.city, nearby: acneNearby[l.id] } });
+  }
+  return paths;
+}
+const { svc, city, nearby } = Astro.props;
+const title = city ? `${svc.name} in ${city}, TX | Texas Skin Center` : `${svc.name} | Texas Skin Center`;
+const description = city ? `${svc.name} in ${city}, TX. ${svc.lead}` : svc.lead;
+---
+<BaseLayout title={title} description={description}>
+  <ServicePage svc={svc} city={city} nearby={nearby} />
+</BaseLayout>
