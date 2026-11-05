@@ -59,10 +59,3 @@ jobs:
           aws s3 sync dist "s3://${S3_BUCKET}" \
             --exclude "_astro/*" --exclude "images/*" --exclude "videos/*" --exclude "fonts/*" \
             --cache-control "public,max-age=0,must-revalidate" --delete
-
-      # Optional: set the secret CLOUDFRONT_DISTRIBUTION_ID to clear the CDN cache after each deploy.
-      - name: Clear CloudFront cache
-        if: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID != '' }}
-        run: |
-          aws cloudfront create-invalidation \
-            --distribution-id "${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}" --paths "/*"
