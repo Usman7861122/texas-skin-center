@@ -1,5 +1,7 @@
 ---
 import HeroTagline from '../islands/HeroTagline';
+interface Props { plain?: boolean }
+const { plain = false } = Astro.props;
 import { heroLines, BOOK_URL, PHONE, PHONE_HREF, media, locations } from '../../data/site';
 ---
 <section class="relative isolate flex min-h-[100svh] items-end overflow-hidden bg-ink" aria-label="Welcome">
@@ -12,14 +14,18 @@ import { heroLines, BOOK_URL, PHONE, PHONE_HREF, media, locations } from '../../
     <source src={media.heroVideo} type="video/mp4" />
   </video>
 
-  <!-- layered veils keep text readable and add depth -->
-  <div class="absolute inset-0 -z-10 bg-gradient-to-r from-ink/95 via-ink/70 to-ink/20"></div>
-  <div class="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_60%_at_25%_65%,rgba(6,24,42,.65),transparent_75%)]"></div>
-  <div class="absolute inset-0 -z-10 bg-gradient-to-t from-ink/80 via-transparent to-ink/50"></div>
-  <div class="orb blue -z-10" style="width:28rem;height:28rem;left:-8rem;bottom:-6rem;opacity:.25"></div>
+  {!plain && (
+    <>
+    <!-- layered veils keep text readable and add depth -->
+    <div class="absolute inset-0 -z-10 bg-gradient-to-r from-ink/95 via-ink/70 to-ink/20"></div>
+    <div class="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_60%_at_25%_65%,rgba(6,24,42,.65),transparent_75%)]"></div>
+    <div class="absolute inset-0 -z-10 bg-gradient-to-t from-ink/80 via-transparent to-ink/50"></div>
+    <div class="orb blue -z-10" style="width:28rem;height:28rem;left:-8rem;bottom:-6rem;opacity:.25"></div>
+    </>
+  )}
 
   <div class="mx-auto w-full max-w-[84rem] px-6 pb-28 pt-44 md:pb-32">
-    <HeroTagline client:load lines={heroLines} bookUrl={BOOK_URL} phone={PHONE} phoneHref={PHONE_HREF} />
+    <HeroTagline client:load glass={plain} lines={heroLines} bookUrl={BOOK_URL} phone={PHONE} phoneHref={PHONE_HREF} />
   </div>
 
   <!-- bottom strip: three clinics + scroll cue -->

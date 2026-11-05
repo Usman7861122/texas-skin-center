@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 
 interface Line { word: string; sub: string; }
-interface Props { lines: Line[]; bookUrl: string; phone: string; phoneHref: string; interval?: number; }
+interface Props { lines: Line[]; bookUrl: string; phone: string; phoneHref: string; interval?: number; glass?: boolean; }
 
-export default function HeroTagline({ lines, bookUrl, phone, phoneHref, interval = 4200 }: Props) {
+export default function HeroTagline({ lines, bookUrl, phone, phoneHref, interval = 4200, glass = false }: Props) {
   const reduce = useReducedMotion();
   const [i, setI] = useState(0);
 
@@ -17,17 +17,17 @@ export default function HeroTagline({ lines, bookUrl, phone, phoneHref, interval
   const line = lines[i];
 
   return (
-    <div className="max-w-3xl">
-      <motion.p
+    <div className={glass ? 'max-w-[40rem] rounded-[10px] bg-white/75 p-6 shadow-[0_40px_90px_-30px_rgba(10,34,57,.55)] ring-1 ring-white/60 backdrop-blur-xl md:p-8' : 'max-w-3xl'}>
+      {!glass && <motion.p
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.8 }}
-        className="eyebrow on-dark mb-6"
+        className={`eyebrow ${glass ? 'mb-4' : 'mb-6 on-dark'}`}
       >
         Board-certified dermatology
-      </motion.p>
+      </motion.p>}
 
-      <h1 className="font-display text-[clamp(2.4rem,6.2vw,5rem)] font-light leading-[1.05] tracking-[-0.02em] text-white [text-shadow:0_2px_24px_rgba(6,24,42,.55)]">
+      <h1 className={`font-display ${glass ? 'text-[clamp(2rem,4.2vw,3.5rem)]' : 'text-[clamp(2.4rem,6.2vw,5rem)]'} font-light leading-[1.05] tracking-[-0.02em] ${glass ? 'text-ink' : 'text-white [text-shadow:0_2px_24px_rgba(6,24,42,.55)]'}`}>
         <motion.span
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -61,7 +61,7 @@ export default function HeroTagline({ lines, bookUrl, phone, phoneHref, interval
         </motion.span>
       </h1>
 
-      <div className="mt-6 min-h-[4.5rem] max-w-xl">
+      <div className={`${glass ? 'mt-4 min-h-[3.5rem]' : 'mt-6 min-h-[4.5rem]'} max-w-xl`}>
         <AnimatePresence mode="wait" initial={false}>
           <motion.p
             key={line.sub}
@@ -69,7 +69,7 @@ export default function HeroTagline({ lines, bookUrl, phone, phoneHref, interval
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.5 }}
-            className="text-lg leading-relaxed text-white/85"
+            className={`${glass ? 'text-base' : 'text-lg'} leading-relaxed ${glass ? 'text-ink/75' : 'text-white/85'}`}
           >
             {line.sub}
           </motion.p>
@@ -80,10 +80,10 @@ export default function HeroTagline({ lines, bookUrl, phone, phoneHref, interval
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.9, duration: 0.8 }}
-        className="mt-8 flex flex-wrap items-center gap-4"
+        className={`${glass ? 'mt-5' : 'mt-8'} flex flex-wrap items-center gap-4`}
       >
         <a href={bookUrl} className="btn btn-primary">Book Appointment</a>
-        <a href={phoneHref} className="btn btn-ghost">
+        <a href={phoneHref} className={`btn ${glass ? 'btn-dark-ghost' : 'btn-ghost'}`}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
             <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" />
           </svg>

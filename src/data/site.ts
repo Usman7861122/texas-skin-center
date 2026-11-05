@@ -223,7 +223,7 @@ export const locations = [
 
 export const media = {
   logo: '/images/logo-e1760456309989.png',
-  aboutMain: '/images/DSC00569-scaled.jpg',
+  aboutMain: '/images/DSC00535-scaled.jpg',
   aboutSmall: '/images/DSC00474-scaled-e1768574676783.jpg',
   parallax: '/images/DSC05785-2-scaled-e1761828647427.jpg',
   group: '/images/DSC00535-scaled.jpg',
